@@ -4,8 +4,17 @@ from vertexai.preview import generative_models
 
 class Vertex:
     location = "us-central1"
-    prompt = """これから入力する文章は会議の音声を文字起こししたものです。
-    セクション毎に整理して、わかりやすく要約してください。"""
+    prompt = """あなたは、プロの議事録作成者です。
+以下の制約条件、内容を元に要点をまとめ、議事録を作成してください。
+
+# 制約条件
+・要点をまとめ、簡潔に書いて下さい。
+・誤字・脱字があるため、話の内容を予測して置き換えてください。
+・見やすいフォーマットにしてください。
+・議論が起きている場合はその結果も書いてください。
+・最後にToDoリストを期日付きでまとめて書いてください。期日がわからない場合は省略可。
+
+# 内容"""
     model = GenerativeModel("gemini-1.0-pro")
 
     def __init__(self, project: str):
@@ -60,4 +69,3 @@ class Vertex:
         #     f.write(text)
 
         return text
-

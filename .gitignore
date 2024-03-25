@@ -1,0 +1,4 @@
+/venv/
+/.idea/
+/out/*_summary.txt
+**/__pycache__/**
