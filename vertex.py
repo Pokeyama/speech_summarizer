@@ -1,9 +1,11 @@
+import datetime
+
 from vertexai.generative_models import GenerativeModel
 from vertexai.preview import generative_models
 
 
 class Vertex:
-    location = "us-central1"
+    location = "asia-northeast1"
     prompt = """あなたは、プロの議事録作成者です。
 以下の制約条件、内容を元に要点をまとめ、議事録を作成してください。
 
@@ -36,6 +38,7 @@ class Vertex:
         Returns:
             str: Generated summary text
         """
+        print("Waiting for vertex ai to complete...")
         responses = self.model.generate_content(
             self.prompt + request,
             generation_config={
@@ -50,22 +53,30 @@ class Vertex:
             },
             # 文章の安全性（悪意）の尺度
             safety_settings={
-                generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-                generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-                generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-                generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
             },
             # リアルタイムに出力するか
             stream=True,
         )
 
         contents = []
-        for response in responses:
-            contents.append(response.text)
+        try:
+            for response in responses:
+                if response.text:
+                    contents.append(response.text)
+        except Exception as e:
+            print("This article cannot be summarized.")
+            today = datetime.date.today()
+            today_str = today.strftime('%Y%m%d')
+            with open(f'../out/{today_str}_error_sentence.txt', 'w', encoding='utf-8') as f:
+                f.write(request)
 
-        text = "".join(contents)
+        result = "".join(contents)
 
         # with open('spoon.txt', 'w', encoding='utf-8') as f:
         #     f.write(text)
 
-        return text
+        return result

@@ -53,7 +53,7 @@ class SpeechToText:
         )
 
         operation = self.client.batch_recognize(request=request)
-        print("Waiting for operation to complete...")
+        print("Waiting for speech to text to complete...")
         response = operation.result(self.timeout)
 
         transcript_builder = []

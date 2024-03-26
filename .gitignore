@@ -2,3 +2,4 @@
 /.idea/
 /out/*_summary.txt
 **/__pycache__/**
+/out/*_error_sentence.txt

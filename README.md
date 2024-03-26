@@ -21,6 +21,7 @@ Install the required libraries by running the following command:
 #### sample
 ```sh
   $ pip install -r requirements.txt
+  $ cd speech_summarizer
   $ python3 main.py -a {audio_path} \
         -p {project_id} \
         -b {bucket_id}
