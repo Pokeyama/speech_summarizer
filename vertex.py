@@ -1,7 +1,7 @@
 import datetime
 
 from vertexai.generative_models import GenerativeModel
-from vertexai.preview import generative_models
+from vertexai import generative_models
 
 
 class Vertex:
