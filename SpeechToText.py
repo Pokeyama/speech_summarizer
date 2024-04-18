@@ -1,3 +1,5 @@
+import datetime
+
 from google.cloud.speech_v2 import SpeechClient
 from google.cloud.speech_v2.types import cloud_speech
 from google.api_core import client_options
@@ -61,6 +63,11 @@ class SpeechToText:
             if len(result.alternatives) > 0:
                 transcript_builder.append(result.alternatives[0].transcript)
 
+        today = datetime.datetime.now()
+        today_str = today.strftime('%Y%m%d%H%M%S')
+        with open(f'./out/{today_str}_speech_string.txt', 'w',
+                  encoding='utf-8') as f:
+            f.write("".join(transcript_builder))
         return "".join(transcript_builder)
 
     @staticmethod

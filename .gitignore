@@ -1,5 +1,6 @@
 /venv/
 /.idea/
 /out/*_summary.txt
+/out/*_speech_string.txt
 **/__pycache__/**
 /out/*_error_sentence.txt

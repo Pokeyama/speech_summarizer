@@ -48,8 +48,8 @@ def main(args):
         gcs.delete()
 
         # Saves the summary to a text file
-        today = datetime.date.today()
-        today_str = today.strftime('%Y%m%d')
+        today = datetime.datetime.now()
+        today_str = today.strftime('%Y%m%d%H%M%S')
         with open(f'./out/{today_str}_summary.txt', 'w', encoding='utf-8') as f:
             f.write(result)
 

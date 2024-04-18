@@ -6,20 +6,20 @@ from vertexai import generative_models
 
 class Vertex:
     location = "asia-northeast1"
-    prompt = """あなたは、プロの議事録作成者です。
-以下の制約条件、内容を元に要点をまとめ、議事録を作成してください。
+    prompt = """あなたはプロの議事録作成者です。内容に書かれた文章は会議を録音し、録音したデータを文字起こししたものです。
+    こちらを制約条件に従いわかりやすくまとめてください。内容が不明な部分は推測して要約してください。
 
 # 制約条件
+・音声は日本語です。要約する文章も日本語で出力してください。
+・markdownで見やすく段落やインデントも考慮して出力してください。
 ・要点をまとめ、簡潔に書いて下さい。
 ・誤字・脱字があるため、話の内容を予測して置き換えてください。
-・見やすいフォーマットにしてください。
+・発言者の名前が分かる場合そちらも記載してください。不明な場合は「スピーカーA、スピーカーB」といった形にしてください。
 ・議論が起きている場合はその結果も書いてください。
-・議論が起きている話題は別セクションで、話し手（スピーカー）が誰か分かるようなセリフ形式にして出力ください。たとえば【（スピーカーの名前）「（セリフ）」】のようにしてください
-・スピーカーの名前が分からなければ「スピーカーA」「スピーカーB」のように仮の名前を入れてください。
 ・最後にToDoリストを期日付きでまとめて書いてください。期日がわからない場合は省略可。
 
 # 内容"""
-    model = GenerativeModel("gemini-1.0-pro")
+    model = GenerativeModel("gemini-1.0-pro-vision-001")
 
     def __init__(self, project: str):
         """
@@ -71,9 +71,9 @@ class Vertex:
                     contents.append(response.text)
         except Exception as e:
             print("This article cannot be summarized.")
-            today = datetime.date.today()
-            today_str = today.strftime('%Y%m%d')
-            with open(f'../out/{today_str}_error_sentence.txt', 'w', encoding='utf-8') as f:
+            today = datetime.datetime.now()
+            today_str = today.strftime('%Y%m%d%H%M%S')
+            with open(f'./out/{today_str}_error_sentence.txt', 'w', encoding='utf-8') as f:
                 f.write(request)
 
         result = "".join(contents)
